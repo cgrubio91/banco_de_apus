@@ -1,0 +1,51 @@
+# ===========================
+# ⚙️ ARCHIVOS A IGNORAR EN GIT
+# ===========================
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+ENV/
+
+# Configuración local
+.env
+*.env
+
+# Archivos de caché y compilación
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Configuración de IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs y datos temporales
+*.log
+*.tmp
+*.bak
+
+# Archivos específicos de despliegue
+*.sqlite3
+*.db
+*.sql
+*.pid
+
+# Render / Railway
+.gitignore~
+node_modules/
