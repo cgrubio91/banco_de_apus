@@ -170,7 +170,7 @@ async def whatsapp_webhook(request: Request):
     # 🧠 PROMPT PARA SQL
     # ===============================
     prompt_sql = f"""
-    Actúa como un asistente experto en bases de datos MySQL y en análisis de precios unitarios (APU) de obras civiles.
+    Actúa como un asistente experto en bases de datos PostgreSQL y en análisis de precios unitarios (APU) de obras civiles.
     Convierte la solicitud del usuario en una consulta SQL válida, basada en la tabla:
 
     Tabla: apus
@@ -206,8 +206,8 @@ async def whatsapp_webhook(request: Request):
         else:
             prompt_resumen = f"""
             Eres un ingeniero experto en Análisis de Precios Unitarios (APU).
-            Resume de manera clara, cálida y profesional los resultados SQL,
-            saludando al usuario por su nombre ({user['nombre']}) y cerrando con una despedida corta.
+            Resume en maximo un parrafo de manera clara, cálida y profesional los resultados SQL,
+            saludando al usuario por su nombre ({user['nombre']}).
             Resultados: {json.dumps(resultados, ensure_ascii=False, default=str)}
             """
             respuesta = gemini_generate(prompt_resumen)
