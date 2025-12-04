@@ -184,6 +184,9 @@ async def whatsapp_webhook(request: Request):
     - Solo genera consultas SELECT completas.
     - Si el usuario pide algo inexistente, responde: "Esa información no existe."
     - No uses formato Markdown ni ```sql```.
+    - Si el usuario pide un listado, ordena los resultados de manera lógica.
+    - Si el usuario pide una comparación, incluye los campos necesarios para comparar.
+    - Limita los resultados a un máximo de 20 registros con LIMIT 20 a menos que el usuario especifique otra cantidad.
 
     Usuario: "{message_body}"
     """
@@ -206,9 +209,38 @@ async def whatsapp_webhook(request: Request):
         else:
             prompt_resumen = f"""
             Eres un ingeniero experto en Análisis de Precios Unitarios (APU).
-            Resume en maximo un parrafo de manera clara, cálida y profesional los resultados SQL,
-            saludando al usuario por su nombre ({user['nombre']}).
-            Resultados: {json.dumps(resultados, ensure_ascii=False, default=str)}
+            Presenta los resultados SQL de manera clara, profesional y bien formateada para WhatsApp.
+            
+            INSTRUCCIONES DE FORMATO:
+            1. Saluda brevemente al usuario por su nombre: {user['nombre']}
+            2. Analiza el tipo de consulta y formatea la respuesta apropiadamente:
+               - **LISTADOS**: Usa numeración (1., 2., 3., etc.) con los datos más relevantes
+               - **COMPARACIONES**: Usa formato de tabla simple con alineación, separando columnas con | 
+               - **TOTALES/AGREGACIONES**: Presenta el resultado de forma clara y destacada
+               - **CONSULTA SIMPLE**: Responde en 1-2 párrafos concisos
+            
+            3. Formato de tabla para comparaciones (ejemplo):
+            ```
+            Item                    | Precio      | Ciudad
+            ----------------------------------------
+            Excavación manual       | $45,000     | Bogotá
+            Relleno compactado      | $32,500     | Medellín
+            ```
+            
+            4. Formato de listado (ejemplo):
+            ```
+            1. Excavación manual - $45,000 (Bogotá)
+            2. Relleno compactado - $32,500 (Medellín)
+            ```
+            
+            5. Incluye solo la información más relevante. Si hay más de 15 resultados, resume los primeros 10-15 más importantes.
+            6. Al final, menciona el total de registros encontrados si son muchos.
+            7. Usa emojis sutiles para mejorar la lectura: 📊 💰 🏗️ 📍 ✅
+            8. NO uses formato Markdown (**, __, etc.), usa MAYÚSCULAS para títulos.
+            9. Mantén las líneas cortas (máximo 60 caracteres) para que se vean bien en WhatsApp.
+            
+            Pregunta del usuario: "{message_body}"
+            Resultados SQL: {json.dumps(resultados, ensure_ascii=False, default=str)}
             """
             respuesta = gemini_generate(prompt_resumen)
 
