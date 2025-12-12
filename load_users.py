@@ -3,7 +3,7 @@ import os
 from db_config import get_db_connection
 from psycopg2 import Error
 
-CSV_PATH = r"c:\Users\cgrub\OneDrive\Documents\apus_mab\apus_mab\usuarios.csv"
+CSV_PATH = r"c:\Users\cgrub\OneDrive\Documents\apus_mab\apus_mab\usuarios2.csv"
 
 def load_users():
     if not os.path.exists(CSV_PATH):
